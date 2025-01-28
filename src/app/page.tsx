@@ -3,11 +3,10 @@
 // import Image from "next/image";
 import { Fireworks } from 'fireworks-js';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+// const router = useRouter();
 
 export default function Home() {
-  const router = useRouter();
-  const { name: queryName, title: queryTitle } = router.query;
+  // const { name: queryName, title: queryTitle } = router.query;
 
   const [name, setName] = useState('');
   const [title, setTitle] = useState('');
@@ -55,15 +54,19 @@ export default function Home() {
   }, [showGreeting, greetings.length]);
 
   useEffect(() => {
-    if (queryName && queryTitle) {
-      setName(queryName as string);
-      setTitle(queryTitle as string);
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const name = params.get('name');
+    const title = params.get('title');
+    if (name && title) {
+      setName(name);
+      setTitle(title);
       setShowGreeting(true);
     }
-  }, [queryName, queryTitle]);
+  }, []);
 
   const handleConfirm = () => {
-    const url = `${window.location.origin}?name=${name}&title=${title}`;
+    const url = `${window.location.origin}${window.location.pathname}#name=${name}&title=${title}`;
     navigator.clipboard.writeText(url);
     alert('链接已复制，可以发送给朋友！');
     setShowGreeting(true);
