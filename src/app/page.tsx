@@ -56,17 +56,30 @@ export default function Home() {
   useEffect(() => {
     const hash = window.location.hash.substring(1);
     const params = new URLSearchParams(hash);
-    const name = params.get('name');
-    const title = params.get('title');
-    if (name && title) {
-      setName(name);
-      setTitle(title);
+    const encodedName = params.get('name');
+    const encodedTitle = params.get('title');
+    if (encodedName && encodedTitle) {
+      setName(decode(encodedName));
+      setTitle(decode(encodedTitle));
       setShowGreeting(true);
     }
   }, []);
 
+  // 编码函数
+  const encode = (text: string): string => {
+    return btoa(text);
+  };
+
+  // 解码函数
+  const decode = (encodedText: string): string => {
+    return atob(encodedText);
+  };
+
+  // 在确认时编码数据
   const handleConfirm = () => {
-    const url = `${window.location.origin}${window.location.pathname}#name=${name}&title=${title}`;
+    const encodedName = encode(name);
+    const encodedTitle = encode(title);
+    const url = `${window.location.origin}${window.location.pathname}#name=${encodedName}&title=${encodedTitle}`;
     navigator.clipboard.writeText(url);
     alert('链接已复制，可以发送给朋友！');
     setShowGreeting(true);
