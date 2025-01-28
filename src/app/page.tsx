@@ -97,8 +97,8 @@ export default function Home() {
       <div id="fireworks-container" style={{ position: 'fixed', width: '100%', height: '100%', zIndex: -1 }}></div>
       {!showGreeting && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
-            <label style={{ marginRight: '10px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+            <label>
               <input
                 type="radio"
                 value="亲爱的"
@@ -107,7 +107,7 @@ export default function Home() {
               />
               亲爱的
             </label>
-            <label style={{ marginRight: '10px' }}>
+            <label>
               <input
                 type="radio"
                 value="尊敬的"
@@ -121,10 +121,22 @@ export default function Home() {
               placeholder="请输入名字"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              style={{ padding: '10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '4px', marginRight: '10px' }}
+              style={{ padding: '10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '4px' }}
             />
-     
-          <button onClick={handleConfirm} style={{ padding: '10px 20px', fontSize: '1em' }}>确认</button>
+            <button 
+              onClick={handleConfirm} 
+              style={{ 
+                padding: '10px 20px', 
+                fontSize: '1em', 
+                backgroundColor: '#007aff', 
+                color: '#fff', 
+                border: 'none', 
+                borderRadius: '5px', 
+                cursor: 'pointer' 
+              }}
+            >
+              确认
+            </button>
           </div>
         </div>
       )}
