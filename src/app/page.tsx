@@ -67,12 +67,12 @@ export default function Home() {
 
   // 编码函数
   const encode = (text: string): string => {
-    return btoa(text);
+    return encodeURIComponent(text);
   };
 
   // 解码函数
   const decode = (encodedText: string): string => {
-    return atob(encodedText);
+    return decodeURIComponent(encodedText);
   };
 
   // 在确认时编码数据
