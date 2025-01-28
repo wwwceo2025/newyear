@@ -3,8 +3,12 @@
 // import Image from "next/image";
 import { Fireworks } from 'fireworks-js';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const router = useRouter();
+  const { name: queryName, title: queryTitle } = router.query;
+
   const [name, setName] = useState('');
   const [title, setTitle] = useState('');
   const [showGreeting, setShowGreeting] = useState(false);
@@ -50,7 +54,18 @@ export default function Home() {
     }
   }, [showGreeting, greetings.length]);
 
+  useEffect(() => {
+    if (queryName && queryTitle) {
+      setName(queryName as string);
+      setTitle(queryTitle as string);
+      setShowGreeting(true);
+    }
+  }, [queryName, queryTitle]);
+
   const handleConfirm = () => {
+    const url = `${window.location.origin}?name=${name}&title=${title}`;
+    navigator.clipboard.writeText(url);
+    alert('链接已复制，可以发送给朋友！');
     setShowGreeting(true);
   };
 
