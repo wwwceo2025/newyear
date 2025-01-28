@@ -1,101 +1,118 @@
-import Image from "next/image";
+"use client";
+
+// import Image from "next/image";
+import { Fireworks } from 'fireworks-js';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
+  const [showGreeting, setShowGreeting] = useState(false);
+  const [currentGreeting, setCurrentGreeting] = useState(0);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const greetings = [
+    '蛇年快乐！愿你在新的一年里幸福安康！',
+    '愿你的每一天都充满快乐与惊喜！',
+    '祝你在新的一年里实现所有梦想！',
+    '愿你在新的一年里健康快乐！',
+    '祝你在新的一年里事业有成！',
+    '愿你在新的一年里好运连连！',
+    '祝你在新的一年里心想事成！',
+    '愿你在新的一年里幸福美满！',
+    '祝你在新的一年里财源广进！',
+    '愿你在新的一年里平安喜乐！',
+    '祝你在新的一年里万事如意！',
+    '愿你在新的一年里笑口常开！',
+    '祝你在新的一年里吉祥如意！',
+    '愿你在新的一年里步步高升！',
+    '祝你在新的一年里幸福安康！',
+    '愿你在新的一年里快乐无忧！',
+    '祝你在新的一年里好运常伴！',
+    '愿你在新的一年里心想事成！',
+    '祝你在新的一年里幸福美满！',
+    '愿你在新的一年里财源广进！'
+  ];
+
+  useEffect(() => {
+    const container = document.getElementById('fireworks-container')!;
+    const fireworks = new Fireworks(container, { /* options */ });
+    fireworks.start();
+
+    return () => fireworks.stop();
+  }, []);
+
+  useEffect(() => {
+    if (showGreeting) {
+      const interval = setInterval(() => {
+        setCurrentGreeting((prev) => (prev + 1) % greetings.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [showGreeting, greetings.length]);
+
+  const handleConfirm = () => {
+    setShowGreeting(true);
+  };
+
+  const handleReset = () => {
+    setShowGreeting(false);
+    setName('');
+    setTitle('');
+    setCurrentGreeting(0);
+  };
+
+  return (
+    <div>
+      <div id="fireworks-container" style={{ position: 'fixed', width: '100%', height: '100%', zIndex: -1 }}></div>
+      {!showGreeting && (
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
+            <label style={{ marginRight: '10px' }}>
+              <input
+                type="radio"
+                value="亲爱的"
+                checked={title === '亲爱的'}
+                onChange={() => setTitle('亲爱的')}
+              />
+              亲爱的
+            </label>
+            <label style={{ marginRight: '10px' }}>
+              <input
+                type="radio"
+                value="尊敬的"
+                checked={title === '尊敬的'}
+                onChange={() => setTitle('尊敬的')}
+              />
+              尊敬的
+            </label>
+            <input
+              type="text"
+              placeholder="请输入名字"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{ padding: '10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '4px', marginRight: '10px' }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+     
+          <button onClick={handleConfirm} style={{ padding: '10px 20px', fontSize: '1em' }}>确认</button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
+      {showGreeting && (
+        <div style={{ textAlign: 'center', marginTop: '40vh', animation: 'fadeInUp 3s ease-in-out infinite', fontFamily: 'Helvetica, Arial, sans-serif' }}>
+          <h1 style={{ color: '#333', fontSize: '2.5em', fontWeight: '300', backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+            {title ? `${title} ${name}, ` : ''}{greetings[currentGreeting]}
+          </h1>
+        
+        </div>
+      )}
+      <button onClick={handleReset} style={{ position: 'fixed', top: '10px', right: '10px', padding: '10px 15px', fontSize: '0.9em', backgroundColor: '#007aff', color: '#fff', border: 'none', borderRadius: '5px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', cursor: 'pointer', zIndex: 1000 }}>发送祝福</button>
+      <style jsx>{`
+        @keyframes fadeInUp {
+          0% { opacity: 0; transform: translateY(20px); }
+          50% { opacity: 1; transform: translateY(0); }
+          100% { opacity: 0; transform: translateY(-20px); }
+        }
+      `}</style>
     </div>
   );
 }
