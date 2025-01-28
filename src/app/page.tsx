@@ -2,7 +2,7 @@
 
 // import Image from "next/image";
 import { Fireworks } from 'fireworks-js';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 // const router = useRouter();
 
 export default function Home() {
@@ -12,8 +12,9 @@ export default function Home() {
   const [title, setTitle] = useState('');
   const [showGreeting, setShowGreeting] = useState(false);
   const [currentGreeting, setCurrentGreeting] = useState(0);
+  const [shuffledGreetings, setShuffledGreetings] = useState<string[]>([]);
 
-  const greetings = [
+  const greetings = useMemo(() => [
     '蛇年快乐！愿你在新的一年里幸福安康！',
     '愿你的每一天都充满快乐与惊喜！',
     '祝你在新的一年里实现所有梦想！',
@@ -33,8 +34,18 @@ export default function Home() {
     '祝你在新的一年里好运常伴！',
     '愿你在新的一年里心想事成！',
     '祝你在新的一年里幸福美满！',
-    '愿你在新的一年里财源广进！'
-  ];
+    '愿你在新的一年里财源广进！',
+    '蛇年大吉，愿你前程似锦！',
+    '金蛇献瑞，祝你事业腾飞！',
+    '蛇年纳福，愿你生活美满！',
+    '蛇年吉祥，愿你梦想成真！',
+    '蛇年如意，祝你步步高升！',
+    '金蛇报喜，愿你喜事连连！',
+    '蛇年祝福，愿你幸福安康！',
+    '蛇年大旺，祝你财运亨通！',
+    '蛇年祈福，愿你阖家欢乐！',
+    '蛇年献瑞，祝你前程锦绣！'
+  ], []);
 
   useEffect(() => {
     const container = document.getElementById('fireworks-container')!;
@@ -46,12 +57,15 @@ export default function Home() {
 
   useEffect(() => {
     if (showGreeting) {
+      // 随机打乱祝福语数组
+      const shuffled = [...greetings].sort(() => Math.random() - 0.5);
+      setShuffledGreetings(shuffled);
       const interval = setInterval(() => {
-        setCurrentGreeting((prev) => (prev + 1) % greetings.length);
+        setCurrentGreeting((prev) => (prev + 1) % shuffled.length);
       }, 3000);
       return () => clearInterval(interval);
     }
-  }, [showGreeting, greetings.length]);
+  }, [showGreeting, greetings]);
 
   useEffect(() => {
     const hash = window.location.hash.substring(1);
@@ -143,9 +157,8 @@ export default function Home() {
       {showGreeting && (
         <div style={{ textAlign: 'center', marginTop: '40vh', animation: 'fadeInUp 3s ease-in-out infinite', fontFamily: 'Helvetica, Arial, sans-serif' }}>
           <h1 style={{ color: '#333', fontSize: '2.5em', fontWeight: '300', backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-            {title ? `${title} ${name}, ` : ''}{greetings[currentGreeting]}
+            {title ? `${title} ${name}, ` : ''}{shuffledGreetings[currentGreeting] || greetings[0]}
           </h1>
-        
         </div>
       )}
       <button onClick={handleReset} style={{ position: 'fixed', top: '10px', right: '10px', padding: '10px 15px', fontSize: '0.9em', backgroundColor: '#007aff', color: '#fff', border: 'none', borderRadius: '5px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', cursor: 'pointer', zIndex: 1000 }}>发送祝福</button>
