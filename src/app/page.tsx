@@ -283,15 +283,18 @@ export default function Home() {
         </div>
       )}
       {showGreeting && (
-        <div style={{ 
-          position: 'relative',
-          zIndex: 2,
-          width: '100%',
-          textAlign: 'center', 
-          animation: 'fadeInUp 3s ease-in-out infinite', 
-          fontFamily: 'Helvetica, Arial, sans-serif',
-          marginTop: '20vh'
-        }}>
+        <div 
+          style={{ 
+            position: 'relative',
+            zIndex: 2,
+            width: '100%',
+            textAlign: 'center', 
+            animation: 'fadeInUp 3s ease-in-out infinite', 
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            marginTop: '20vh'
+          }}
+          onClick={handleClick}
+        >
           <h1 style={{ 
             display: 'inline-block',
             background: 'linear-gradient(45deg, #ff6b6b, #ffd93d)',
