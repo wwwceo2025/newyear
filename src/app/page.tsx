@@ -1,8 +1,9 @@
 "use client";
 
+import React from 'react';
 // import Image from "next/image";
 import { Fireworks } from 'fireworks-js';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 // const router = useRouter();
 
 export default function Home() {
@@ -47,13 +48,111 @@ export default function Home() {
     '蛇年献瑞，祝您前程锦绣！'
   ], []);
 
+  const handleClick = useCallback((e: { clientX: number; clientY: number }) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+    
+    // 创建文字元素
+    const text = document.createElement('div');
+    text.textContent = randomGreeting;
+    text.style.position = 'fixed';
+    text.style.left = `${x}px`;
+    text.style.top = `${y}px`;
+    text.style.background = 'linear-gradient(45deg, #ff6b6b, #ffd93d)';
+    text.style.webkitBackgroundClip = 'text';
+    text.style.webkitTextFillColor = 'transparent';
+    text.style.backgroundClip = 'text';
+    text.style.color = 'transparent';
+    text.style.fontSize = '1.2em';
+    text.style.fontWeight = 'bold';
+    text.style.textShadow = '2px 2px 4px rgba(0,0,0,0.3), -1px -1px 1px rgba(255,255,255,0.5)';
+    text.style.transition = 'all 2s';
+    text.style.opacity = '1';
+    text.style.transform = 'translateY(0)';
+    text.style.pointerEvents = 'none';
+    text.style.padding = '5px 10px';
+    text.style.borderRadius = '4px';
+    text.style.backdropFilter = 'blur(5px)';
+    
+    const container = document.getElementById('fireworks-container');
+    if (container) {
+      container.appendChild(text);
+
+      // 文字动画
+      setTimeout(() => {
+        text.style.opacity = '0';
+        text.style.transform = 'translateY(-50px) scale(1.2)';
+      }, 100);
+
+      // 移除文字元素
+      setTimeout(() => {
+        container.removeChild(text);
+      }, 2000);
+    }
+  }, [greetings]);
+
   useEffect(() => {
     const container = document.getElementById('fireworks-container')!;
-    const fireworks = new Fireworks(container, { /* options */ });
+    const fireworks = new Fireworks(container, {
+      explosion: 10,
+      mouse: {
+        click: true,
+        move: false,
+        max: 1
+      },
+      boundaries: {
+        x: 0,
+        y: 0,
+        width: window.innerWidth,
+        height: window.innerHeight
+      },
+      sound: {
+        enabled: false
+      },
+      delay: {
+        min: 30,
+        max: 60
+      },
+      hue: {
+        min: 0,
+        max: 360
+      },
+      rocketsPoint: {
+        min: 0,
+        max: 100
+      },
+      lineWidth: {
+        explosion: {
+          min: 1,
+          max: 3
+        },
+        trace: {
+          min: 1,
+          max: 2
+        }
+      },
+      brightness: {
+        min: 50,
+        max: 80
+      },
+      decay: {
+        min: 0.015,
+        max: 0.03
+      },
+      acceleration: 1.05
+    });
+
+    // 添加点击事件监听器
+    container.addEventListener('click', handleClick);
     fireworks.start();
 
-    return () => fireworks.stop();
-  }, []);
+    return () => {
+      fireworks.stop();
+      container.removeEventListener('click', handleClick);
+      container.innerHTML = '';
+    };
+  }, [handleClick]);
 
   useEffect(() => {
     if (showGreeting) {
@@ -107,10 +206,33 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <div id="fireworks-container" style={{ position: 'fixed', width: '100%', height: '100%', zIndex: -1 }}></div>
-      {!showGreeting && (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+    <div style={{ 
+      width: '100%', 
+      minHeight: '100vh',
+      position: 'relative',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'flex-start'
+    }}>
+      <div id="fireworks-container" style={{ 
+        position: 'fixed', 
+        top: 0,
+        left: 0,
+        width: '100%', 
+        height: '100%', 
+        zIndex: 1
+      }}></div>
+      {showGreeting ? null : (
+        <div style={{ 
+          position: 'relative',
+          zIndex: 2,
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          padding: '20px',
+          borderRadius: '12px',
+          marginTop: '20px'
+        }}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
             <label>
               <input
@@ -161,8 +283,32 @@ export default function Home() {
         </div>
       )}
       {showGreeting && (
-        <div style={{ textAlign: 'center', marginTop: '30vh', animation: 'fadeInUp 3s ease-in-out infinite', fontFamily: 'Helvetica, Arial, sans-serif' }}>
-          <h1 style={{ color: '#333', fontSize: '2.5em', fontWeight: '300', backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+        <div style={{ 
+          position: 'relative',
+          zIndex: 2,
+          width: '100%',
+          textAlign: 'center', 
+          animation: 'fadeInUp 3s ease-in-out infinite', 
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          marginTop: '20vh'
+        }}>
+          <h1 style={{ 
+            display: 'inline-block',
+            background: 'linear-gradient(45deg, #ff6b6b, #ffd93d)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            color: 'transparent',
+            fontSize: '2.5em', 
+            fontWeight: 'bold',
+            padding: '20px', 
+            borderRadius: '12px', 
+            backdropFilter: 'blur(10px)',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.2), -1px -1px 1px rgba(255,255,255,0.3)',
+            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1), 0 -2px 6px rgba(255, 255, 255, 0.2)',
+            maxWidth: '90%',
+            margin: '0 auto'
+          }}>
             {title ? `${title} ${name}, ` : ''}{shuffledGreetings[currentGreeting] || greetings[0]}
           </h1>
         </div>
