@@ -135,7 +135,13 @@ export default function Home() {
               placeholder="请输入名字"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              style={{ padding: '10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '4px' }}
+              style={{ 
+                padding: '10px', 
+                fontSize: '1em', 
+                border: '1px solid #ccc', 
+                borderRadius: '4px',
+                width: '120px' 
+              }}
             />
             <button 
               onClick={handleConfirm} 
@@ -155,13 +161,38 @@ export default function Home() {
         </div>
       )}
       {showGreeting && (
-        <div style={{ textAlign: 'center', marginTop: '40vh', animation: 'fadeInUp 3s ease-in-out infinite', fontFamily: 'Helvetica, Arial, sans-serif' }}>
+        <div style={{ textAlign: 'center', marginTop: '30vh', animation: 'fadeInUp 3s ease-in-out infinite', fontFamily: 'Helvetica, Arial, sans-serif' }}>
           <h1 style={{ color: '#333', fontSize: '2.5em', fontWeight: '300', backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
             {title ? `${title} ${name}, ` : ''}{shuffledGreetings[currentGreeting] || greetings[0]}
           </h1>
         </div>
       )}
-      <button onClick={handleReset} style={{ position: 'fixed', top: '10px', right: '10px', padding: '10px 15px', fontSize: '0.9em', backgroundColor: '#007aff', color: '#fff', border: 'none', borderRadius: '5px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', cursor: 'pointer', zIndex: 1000 }}>发送祝福</button>
+      
+        <button 
+          onClick={handleReset} 
+          style={{ 
+            position: 'fixed', 
+            top: '10px', 
+            right: '10px', 
+            padding: '10px', 
+            fontSize: '1.2em', 
+            backgroundColor: 'transparent', 
+            color: '#007aff', 
+            border: 'none', 
+            borderRadius: '50%', 
+            cursor: 'pointer', 
+            zIndex: 1000,
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+          }}
+        >
+          ⚙️
+        </button>
+      
       <style jsx>{`
         @keyframes fadeInUp {
           0% { opacity: 0; transform: translateY(20px); }
